@@ -21,7 +21,7 @@ def find_jumps(data: torch.Tensor, ths: float = 0.1):
     return idx_jumps
 
 
-def plot_jums(data_tensor, idx_jumps):
+def plot_jumps(data_tensor, idx_jumps):
     plt.subplots(figsize=(10, 5), dpi=100)
 
     for i in range(len(data_tensor)):
