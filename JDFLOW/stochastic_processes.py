@@ -1,10 +1,9 @@
 import numpy as np
+import torch
 
-def ornstein_uhlenbeck_process(n, m, mu):
+def ornstein_uhlenbeck_process(n, m, mu, theta, sigma, x0):
     res = []
-    theta = 1
-    sigma = 0.5
-    # mu = 0.0
+
     T = 1
     
     for j in range(m):
@@ -12,7 +11,8 @@ def ornstein_uhlenbeck_process(n, m, mu):
         s = np.zeros(n + 1)
         time = np.zeros(n + 1)
         
-        x[0] = np.random.normal(0, 0.1)
+        # x[0] = np.random.normal(0, 0.1)
+        x[0] = x0
         dt = T/float(n)
 
         for t in range(n):
@@ -21,7 +21,17 @@ def ornstein_uhlenbeck_process(n, m, mu):
 
         res.append(x)
     
-    return np.array(res).T
+    return np.array(res)
+
+
+def likelihood_OU(data, mu, theta, sigma, x0):
+    s = 0
+    for i in range(len(data)):
+        t = i+1
+        s += torch.log( 1 / (torch.sqrt(torch.tensor(2*torch.pi)) * torch.sqrt(torch.tensor(sigma**2 * (1 - torch.exp(torch.tensor(-2*theta*t)))/(2*theta)))) ) +\
+            - 1/(2 * (sigma**2 * (1 - torch.exp(torch.tensor(-2*theta*t)))/(2*theta))) * (data[i] - mu - (x0-mu)*torch.exp(torch.tensor(-theta*t)))**2
+            
+    return s
 
 def dclProcess(N, M):
     T = 1
