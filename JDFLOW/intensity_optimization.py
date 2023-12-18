@@ -27,6 +27,8 @@ def plot_jumps(data_tensor, idx_jumps):
     for i in range(len(data_tensor)):
         plt.plot(data_tensor[i])
         plt.scatter(idx_jumps[i], data_tensor[i][idx_jumps[i]], color='black')
+        plt.xlabel('Time')
+        plt.ylabel('Values')
         
     plt.show()
     
