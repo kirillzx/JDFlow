@@ -13,7 +13,7 @@ from torch import optim
 
 
 def train(data, method, epochs):
-    batch_dim = 5
+    batch_dim = 2
     device='cpu'
     train_data = data.to(device) 
     train_ts = torch.tensor(np.arange(len(train_data)))
