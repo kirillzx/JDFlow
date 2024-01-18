@@ -6,6 +6,11 @@ import numpy as np
 import torch.nn as nn
 from tqdm import tqdm
 
+class extract_tensor(nn.Module):
+    def forward(self,x):
+        tensor, _ = x
+        return tensor
+
 
 def flip(x, dim):
 
@@ -108,7 +113,10 @@ class SpectralFilter(nn.Module):
 
             self.in_size, self.out_size = self.out_size, self.in_size
 
-        self.sig_net = nn.Sequential(  # RNN(mode="RNN", HIDDEN_UNITS=20, INPUT_SIZE=1,),
+        self.sig_net = nn.Sequential(
+            nn.LSTM(self.in_size, self.in_size, num_layers=1, batch_first=True),
+            extract_tensor(),
+            nn.Sigmoid(),
             nn.Linear(self.in_size, hidden),
             nn.Sigmoid(),  # nn.LeakyReLU(),
             nn.Linear(hidden, hidden),
@@ -116,7 +124,10 @@ class SpectralFilter(nn.Module):
             nn.Linear(hidden, self.out_size),
         )
 
-        self.mu_net = nn.Sequential(  # RNN(mode="RNN", HIDDEN_UNITS=20, INPUT_SIZE=1,),
+        self.mu_net = nn.Sequential(
+            nn.LSTM(self.in_size, self.in_size, num_layers=1, batch_first=True),
+            extract_tensor(),
+            nn.Sigmoid(),
             nn.Linear(self.in_size, hidden),
             nn.Sigmoid(),  # nn.LeakyReLU(),
             nn.Linear(hidden, hidden),
