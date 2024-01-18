@@ -32,3 +32,13 @@ def monte_carlo_train(data, N, dt, n, n_flows, epochs, time_steps):
         res_arr.append(synth_data)
         
     return np.mean(res_arr, axis=0)
+
+
+def monte_carlo_sample(N, n_samples, nsde_flow, M, scaler):
+    res_arr = []
+    for _ in range(N):
+        synth_data = sample(nsde_flow, n_samples=n_samples, M=M, scaler=scaler)
+        
+        res_arr.append(synth_data)
+        
+    return np.mean(res_arr, axis=0)
