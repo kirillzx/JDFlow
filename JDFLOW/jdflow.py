@@ -72,16 +72,16 @@ class DiffMap(nn.Module):
             nn.Sigmoid(),
             nn.Linear(hidden, self.out_size)
         )
-        self.fc_nu = nn.Sequential(
-            nn.LSTM(self.out_size, self.out_size, num_layers=1, batch_first=True),
-            extract_tensor(),
-            nn.Sigmoid(),
-            nn.Linear(self.out_size, hidden),
-            nn.Sigmoid(),
-            nn.Linear(hidden, hidden),
-            nn.Sigmoid(),
-            nn.Linear(hidden, self.in_size)
-        )
+        # self.fc_nu = nn.Sequential(
+        #     nn.LSTM(self.out_size, self.out_size, num_layers=1, batch_first=True),
+        #     extract_tensor(),
+        #     nn.Sigmoid(),
+        #     nn.Linear(self.out_size, hidden),
+        #     nn.Sigmoid(),
+        #     nn.Linear(hidden, hidden),
+        #     nn.Sigmoid(),
+        #     nn.Linear(hidden, self.in_size)
+        # )
         
         # self.xi = Operator_F(self.time_steps, self.out_size)
         # self.psi = Operator_F(self.h_dim, self.h_dim)
@@ -103,10 +103,8 @@ class DiffMap(nn.Module):
         if self.permute:
             x2, x1 = x1, x2
         
-        z1 = x1 + self.fc_nu(x2)
+        z1 = x1
         sig = self.fc_sig(z1)
-        
-    
         z2 = self.fc_mu(z1) + x2 * torch.exp(sig)
         
         if self.permute:
@@ -129,7 +127,7 @@ class DiffMap(nn.Module):
             
         
         x2 = (z2 - self.fc_mu(z1)) * torch.exp(-self.fc_sig(z1))
-        x1 = z1 - self.fc_nu(x2)
+        x1 = z1
       
         
         if self.permute:
