@@ -114,9 +114,6 @@ class SpectralFilter(nn.Module):
             self.in_size, self.out_size = self.out_size, self.in_size
 
         self.sig_net = nn.Sequential(
-            nn.LSTM(self.in_size, self.in_size, num_layers=1, batch_first=True),
-            extract_tensor(),
-            nn.Sigmoid(),
             nn.Linear(self.in_size, hidden),
             nn.Sigmoid(),  # nn.LeakyReLU(),
             nn.Linear(hidden, hidden),
@@ -125,9 +122,6 @@ class SpectralFilter(nn.Module):
         )
 
         self.mu_net = nn.Sequential(
-            nn.LSTM(self.in_size, self.in_size, num_layers=1, batch_first=True),
-            extract_tensor(),
-            nn.Sigmoid(),
             nn.Linear(self.in_size, hidden),
             nn.Sigmoid(),  # nn.LeakyReLU(),
             nn.Linear(hidden, hidden),
