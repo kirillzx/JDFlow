@@ -57,7 +57,7 @@ def choose_data(name='DCL', n=300):
         
         
 def train(data, dt, n, n_flows, epochs, time_steps):
-    # data_save = data
+    data_save = copy.deepcopy(torch.FloatTensor(data))
     scaler = MinMaxScaler((0, 1))
     data = scaler.fit_transform(data.T).T
     data_tensor = torch.FloatTensor(data)
@@ -65,13 +65,13 @@ def train(data, dt, n, n_flows, epochs, time_steps):
     
     # identify initial Merton model params
     lambda_j = 0.6
-    idx_jumps = list(map(lambda x: find_jumps(x, lambda_j), data_tensor))
-    init_intensity = estimate_init_intensity_array(data_tensor, idx_jumps)/dt
-    jump_part, diff_part = separate_dynamics(data_tensor, idx_jumps)
-    init_params = estimate_init_params(data_tensor, jump_part, diff_part, dt)
+    idx_jumps = list(map(lambda x: find_jumps(x, lambda_j), data_save))
+    init_intensity = estimate_init_intensity_array(data_save, idx_jumps)/dt
+    jump_part, diff_part = separate_dynamics(data_save, idx_jumps)
+    init_params = estimate_init_params(data_save, jump_part, diff_part, dt)
     
     # optimize params
-    opt_params = optimize_params(data_tensor, init_params, init_intensity, dt)
+    opt_params = optimize_params(data_save, init_params, init_intensity, dt)
     
     xiP0 = opt_params[-1]
     
