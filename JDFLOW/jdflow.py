@@ -131,7 +131,7 @@ class DiffMap(nn.Module):
 
 
 
-class Flow(nn.Module):
+class JDFlow(nn.Module):
     def __init__(self, n_flows, h_dim, M, time_steps, dt, sig_dim, xiP0):
         super(Flow, self).__init__()
         
@@ -176,9 +176,9 @@ class Flow(nn.Module):
 
     def inverse(self, z):
         
-        # wt = torch.randn((1, self.v_dim))
-        # v0 = self.phi(wt, z[:, 0].view(1, z.size(0)))
-        # vt = sdeint_jump(self.drift, self.diffusion, self.jump, self.dt, v0, self.time_steps, self.v_dim, self.xiP)
+        wt = torch.randn((1, self.v_dim))
+        v0 = self.phi(wt, z[:, 0].view(1, z.size(0)))
+        self.vt = sdeint_jump(self.drift, self.diffusion, self.jump, self.dt, v0, self.time_steps, self.v_dim, self.xiP)
 
         for bijection in reversed(self.bijections):
             z = bijection.inverse(z, self.vt)

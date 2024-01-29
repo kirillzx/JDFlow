@@ -30,7 +30,6 @@ from JDFLOW.nsde_solvers import *
 from JDFLOW.jdflow import *
 from JDFLOW.evaluate.metrics import *
 from JDFLOW.FourierFlows import FourierFlow
-from JDFLOW.FSDE import train
 from JDFLOW.evaluate.metrics import *
 
 import warnings
