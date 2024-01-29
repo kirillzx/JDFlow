@@ -42,16 +42,16 @@ plt.style.use('ggplot')
 
 
 #choose any of type process or upload your data. The main rule that length of each series must be the same.
-def choose_data(name='DCL', n=300):
+def choose_data(name='DCL', n=300, M=10):
     dt = 1/n
     if name == 'DCL':
-        data = dclProcess(n, 10).T
+        data = dclProcess(n, M).T
     
     elif name == 'Merton':
-        data = np.array([merton_process(s0=1, xiP=7, muj=0, sigmaj=0.2, r=0.04, sigma=0.6, n=n, T=1) for i in range(15)])
+        data = np.array([merton_process(s0=1, xiP=7, muj=0, sigmaj=0.2, r=0.04, sigma=0.6, n=n, T=1) for i in range(M)])
     
     elif name == 'GBM':
-        data = np.array([geometric_BM(s0=1, mu=0.1, sigma=0.5, n=n, T=1) for i in range(10)])
+        data = np.array([geometric_BM(s0=1, mu=0.1, sigma=0.5, n=n, T=1) for i in range(M)])
         
     return data, dt, n
         
