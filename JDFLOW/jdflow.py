@@ -133,7 +133,7 @@ class DiffMap(nn.Module):
 
 class JDFlow(nn.Module):
     def __init__(self, n_flows, h_dim, M, time_steps, dt, sig_dim, xiP0):
-        super(Flow, self).__init__()
+        super(JDFlow, self).__init__()
         
         self.h_dim = h_dim
         self.permute = [True if i % 2 else False for i in range(n_flows)]
