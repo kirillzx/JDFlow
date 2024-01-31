@@ -12,7 +12,7 @@ import numpy as np
 from torch import optim
 
 
-def train(data, method, epochs):
+def train_fsde(data, method, epochs):
     batch_dim = 5
     device='cpu'
     train_data = data.to(device) 
@@ -29,7 +29,7 @@ def train(data, method, epochs):
         func_fSDE = LatentFSDEfunc().to(device)
         params = (list(func_fSDE.parameters())) 
 
-    optimizer = optim.Adam(params, lr=1e-2)
+    optimizer = optim.Adam(params, lr=1e-3)
     
     for itr in range(1, epochs + 1):
         optimizer.zero_grad()
@@ -48,7 +48,7 @@ def train(data, method, epochs):
             pred_z = torch.zeros(batch_dim, train_data.size(0), latent_dim) + train_data[0, 0] - pred_return
         elif method == "SDE":
             # dimension of sdeint is (t_size, batch_size, latent_size)
-            pred_z = sdeint(func_SDE, z0, train_ts).permute(1, 0, 2)
+            pred_z = sdeint(func_SDE, z0, train_ts) #.permute(1, 0, 2)
         elif method == "fSDE":
             # dimension of fsdeint is (batch_size, t_size, latent_size)
             pred_z = fsdeint(func_fSDE, 0.7, z0, train_ts) #.permute(0, 2, 1)
@@ -86,7 +86,7 @@ def train(data, method, epochs):
             return_pred = torch.cumsum(return_pred.unsqueeze(-1), dim=1)
             xs_gen = torch.zeros(batch_dim, train_data.size(0), latent_dim) + train_data[0, 0] - return_pred
         elif method == 'SDE':
-            xs_gen = sdeint(func_SDE, x0, torch.tensor(np.arange(len(train_data)))).permute(1, 0, 2)
+            xs_gen = sdeint(func_SDE, x0, torch.tensor(np.arange(len(train_data)))) #.permute(1, 0, 2)
         elif method == 'fSDE':
             xs_gen = fsdeint(func_fSDE, 0.7, x0, torch.tensor(np.arange(len(train_data))))
         

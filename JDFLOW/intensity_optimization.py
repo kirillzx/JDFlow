@@ -26,21 +26,21 @@ def plot_jumps(data_tensor, idx_jumps):
 
     for i in range(len(data_tensor)):
         plt.plot(data_tensor[i])
-        plt.scatter(idx_jumps[i], data_tensor[i][idx_jumps[i]], color='black')
+        plt.scatter(idx_jumps[i], data_tensor[i][idx_jumps[i]], color='black', zorder=3)
         plt.xlabel('Time')
         plt.ylabel('Values')
         
     plt.show()
     
     
-def calc_mean_jump(data: list, idx: list):
-    jumps = []
-    for i in range(len(idx)):
-        jumps.append(torch.mean(data[i][idx[i]]))
+# def calc_mean_jump(data: list, idx: list):
+#     jumps = []
+#     for i in range(len(idx)):
+#         jumps.append(torch.mean(data[i][idx[i]]))
         
-    jumps = torch.stack(jumps)
+#     jumps = torch.stack(jumps)
         
-    return torch.mean(jumps[~jumps.isnan()])
+#     return torch.mean(jumps[~jumps.isnan()])
 
 def estimate_init_intensity(data, idx_jumps) -> float:
     return len(idx_jumps) / len(data)
