@@ -2,6 +2,9 @@ import numpy as np
 from scipy.signal import argrelextrema
 from scipy.spatial.distance import jensenshannon
 from scipy.stats import kstest, ks_2samp, wasserstein_distance
+from fbprophet import Prophet
+from sklearn.metrics import mean_squared_error
+from IPython.display import display
 
 
 def autocorr(x):
@@ -54,3 +57,63 @@ def js_calc(real, synth):
         w_dist.append(jensenshannon(real[i], synth[i]))
     
     return np.mean(w_dist)
+
+
+def forecast_metrics(real_data, synth_data, synth_PAR, synth_fsde, n=31):
+    train_size_init = int(len(real_data[0]) - n*test_size)
+
+    test_size = len(real_data[0])//n - 1
+
+    def forecasting_cv(synth, real, train_size_init, test_size, n):
+        array_mse = []
+        train = synth[:, :train_size_init]
+        
+
+        
+        for j in range(len(real)):
+            train_iter = copy.deepcopy(train[j])
+            mse_iter = []
+            train_size = train_size_init
+            
+            for _ in range(n-2):
+                df = pd.DataFrame()
+                df['y'] = train_iter
+                df.index = pd.date_range(start='1/1/2022', periods=len(train_iter), freq='D')
+                df = df.reset_index()
+                df = df.rename(columns={'index': 'ds'})
+
+                m = Prophet(daily_seasonality=True)
+                m.fit(df)
+                
+                future = m.make_future_dataframe(periods = test_size)
+                pred_synth = m.predict(future)['yhat'][-test_size:]
+                            
+                test_synth = synth[j, train_size : (train_size+test_size)]
+                test_real = real[j, train_size : (train_size+test_size)]
+                
+                mse = mean_squared_error(pred_synth.values, test_real)
+                
+                train_iter = np.concatenate([train_iter, test_synth])
+                
+                train_size += test_size
+        
+                
+                mse_iter.append(mse)
+        
+            
+            array_mse.append(np.mean(mse_iter))
+            
+        return array_mse    
+    
+    mse_real = np.array(forecasting_cv(real_data, real_data, train_size_init, test_size, n))
+    mse_jdflow = np.array(forecasting_cv(synth_data, real_data, train_size_init, test_size, n))
+    mse_ff = np.array(forecasting_cv(synth_ff, real_data, train_size_init, test_size, n))
+    mse_par = np.array(forecasting_cv(synth_PAR, real_data, train_size_init, test_size, n))
+    mse_fsde = np.array(forecasting_cv(synth_fsde, real_data, train_size_init, test_size, n))
+    
+    display(pd.DataFrame([[mse_real.mean(), np.min(mse_real), np.max(mse_real)],
+              [mse_jdflow.mean(), np.min(mse_jdflow), np.max(mse_jdflow)],
+              [mse_ff.mean(), np.min(mse_ff), np.max(mse_ff)],
+              [mse_par.mean(), np.min(mse_par), np.max(mse_par)],
+              [mse_fsde.mean(), np.min(mse_fsde), np.max(mse_fsde)]],\
+             columns=['Mean', 'Min', 'Max'], index = ['Real', 'JDFlow', 'Fourier Flow', 'PAR', 'fSDE']))
