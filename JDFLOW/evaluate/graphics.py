@@ -132,14 +132,14 @@ def plot_qq_extrema_all(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, 
     plt.scatter(extr_quant_computation(synth_PAR), extr_quant_computation(real_data), color='tab:orange', label='PAR', alpha=0.8)
     plt.scatter(extr_quant_computation(synth_fsde), extr_quant_computation(real_data), color='tab:green', label='fSDE', alpha=0.8)
 
-    plt.xlabel('Synth', fontsize=20)
-    plt.ylabel('Real', fontsize=20)
-    plt.xticks(fontsize=20)
-    plt.yticks(fontsize=20)
+    plt.xlabel('Synth')
+    plt.ylabel('Real')
+    plt.xticks()
+    plt.yticks()
     plt.xlim((0, real_qqextr.max()+1))
     plt.ylim((0, real_qqextr.max()+1))
 
-    plt.legend(fontsize=17)
+    plt.legend()
     plt.tight_layout(pad=0.5)
 
     if save:
@@ -198,12 +198,12 @@ def plot_autocorr_all(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, sa
     plt.plot(autocorr_vec(synth_PAR), label = 'PAR', color='tab:orange')
     plt.plot(autocorr_vec(synth_fsde), label = 'fSDE', color='tab:green')
 
-    plt.xlabel('Lag', fontsize=20)
-    plt.ylabel('Correlation', fontsize=20)
-    plt.xticks(fontsize=20)
-    plt.yticks(fontsize=20)
+    plt.xlabel('Lag')
+    plt.ylabel('Correlation')
+    plt.xticks()
+    plt.yticks()
 
-    plt.legend(fontsize=20)
+    plt.legend()
     plt.tight_layout(pad=0.5)
 
     if save:
