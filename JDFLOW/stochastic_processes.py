@@ -36,7 +36,7 @@ def likelihood_OU(data, mu, theta, sigma, x0):
 def dclProcess(N, M):
     T = 1
     theta = 1
-    delta = 1
+    delta = 2
 
     Z1 = np.random.normal(0.0, 1.0, [M, N])
     X = np.zeros([M, N + 1])
