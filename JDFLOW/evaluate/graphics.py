@@ -86,28 +86,28 @@ def plot_qq_extrema(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, save
 
   axs[0, 0].plot(extr_quant_computation(real_data), extr_quant_computation(real_data), color='black', label='Real')
   axs[0, 0].scatter(extr_quant_computation(synth_data), extr_quant_computation(real_data), color='tab:red', label='JDFlow')
-  axs[0, 0].set_xlabel('Real')
-  axs[0, 0].set_ylabel('Synth')
+  axs[0, 0].set_xlabel('Synth')
+  axs[0, 0].set_ylabel('Real')
   axs[0, 0].legend()
 
 
   axs[0, 1].plot(extr_quant_computation(real_data), extr_quant_computation(real_data), color='black', label='Real')
   axs[0, 1].scatter(extr_quant_computation(synth_ff), extr_quant_computation(real_data), color='tab:blue', label='Fourier Flow')
-  axs[0, 1].set_xlabel('Real')
+  axs[0, 1].set_xlabel('Synth')
   # axs[0, 1].set_ylabel('Synth')
   axs[0, 1].legend()
 
 
   axs[1, 0].plot(extr_quant_computation(real_data), extr_quant_computation(real_data), color='black', label='Real')
   axs[1, 0].scatter(extr_quant_computation(synth_PAR), extr_quant_computation(real_data), color='tab:orange', label='PAR')
-  axs[1, 0].set_xlabel('Real')
-  axs[1, 0].set_ylabel('Synth')
+  axs[1, 0].set_xlabel('Synth')
+  axs[1, 0].set_ylabel('Real')
   axs[1, 0].legend()
 
 
   axs[1, 1].plot(extr_quant_computation(real_data), extr_quant_computation(real_data), color='black', label='Real')
   axs[1, 1].scatter(extr_quant_computation(synth_fsde), extr_quant_computation(real_data), color='tab:green', label='fSDE')
-  axs[1, 1].set_xlabel('Real')
+  axs[1, 1].set_xlabel('Synth')
   # axs[1, 1].set_ylabel('Synth')
   axs[1, 1].legend()
 
@@ -121,30 +121,57 @@ def plot_qq_extrema(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, save
   plt.show()
   
   
+def plot_qq_extrema_all(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, save, name):
+    fig = plt.subplots(figsize=(6, 6), dpi=100)
+
+    real_qqextr = extr_quant_computation(real_data)
+
+    plt.plot(real_qqextr, real_qqextr, color='black', label='Real', zorder=4, alpha=0.7)
+    plt.scatter(extr_quant_computation(synth_data), extr_quant_computation(real_data), color='tab:red', label='JDFlow', zorder=3, alpha=0.8)
+    plt.scatter(extr_quant_computation(synth_ff), extr_quant_computation(real_data), color='tab:blue', label='Fourier Flow', alpha=0.8)
+    plt.scatter(extr_quant_computation(synth_PAR), extr_quant_computation(real_data), color='tab:orange', label='PAR', alpha=0.8)
+    plt.scatter(extr_quant_computation(synth_fsde), extr_quant_computation(real_data), color='tab:green', label='fSDE', alpha=0.8)
+
+    plt.xlabel('Synth', fontsize=20)
+    plt.ylabel('Real', fontsize=20)
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.xlim((0, real_qqextr.max()+1))
+    plt.ylim((0, real_qqextr.max()+1))
+
+    plt.legend(fontsize=17)
+    plt.tight_layout(pad=0.5)
+
+    if save:
+        plt.savefig(f'{name}.pdf', dpi=300) 
+    
+    plt.show()
+  
+  
   
 def plot_autocorr(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, save, name):
     fig, axs = plt.subplots(2, 2, figsize=(10, 5), dpi=100)
 
-    axs[0, 0].scatter(np.arange(0, len(data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
+    axs[0, 0].scatter(np.arange(0, len(real_data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
     axs[0, 0].plot(autocorr_vec(synth_data), label = 'JDFlow', color='tab:red')
     axs[0, 0].set_xlabel('Lag')
     axs[0, 0].set_ylabel('Correlation')
     axs[0, 0].legend()
 
 
-    axs[0, 1].scatter(np.arange(0, len(data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
+    axs[0, 1].scatter(np.arange(0, len(real_data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
     axs[0, 1].plot(autocorr_vec(synth_ff), label = 'Fourier Flow', color='tab:blue')
     axs[0, 1].set_xlabel('Lag')
     axs[0, 1].set_ylabel('Correlation')
     axs[0, 1].legend()
 
-    axs[1, 0].scatter(np.arange(0, len(data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
+    axs[1, 0].scatter(np.arange(0, len(real_data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
     axs[1, 0].plot(autocorr_vec(synth_PAR), label = 'PAR', color='tab:orange')
     axs[1, 0].set_xlabel('Lag')
     axs[1, 0].set_ylabel('Correlation')
     axs[1, 0].legend()
 
-    axs[1, 1].scatter(np.arange(0, len(data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
+    axs[1, 1].scatter(np.arange(0, len(real_data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
     axs[1, 1].plot(autocorr_vec(synth_fsde), label = 'fSDE', color='tab:green')
     axs[1, 1].set_xlabel('Lag')
     axs[1, 1].set_ylabel('Correlation')
@@ -157,6 +184,31 @@ def plot_autocorr(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, save, 
     
     if save:
         plt.savefig(f'{name}.pdf', dpi=300)
+        
+    plt.show()
+    
+    
+def plot_autocorr_all(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, save, name):
+    fig = plt.subplots(figsize=(10, 5), dpi=100)
+
+
+    plt.scatter(np.arange(0, len(real_data[0]))[::50], autocorr_vec(real_data)[::50], marker='o', label = 'Real', color='black', s=18)
+    plt.plot(autocorr_vec(synth_data), label = 'JDFlow', color='tab:red')
+    plt.plot(autocorr_vec(synth_ff), label = 'Fourier Flow', color='tab:blue')
+    plt.plot(autocorr_vec(synth_PAR), label = 'PAR', color='tab:orange')
+    plt.plot(autocorr_vec(synth_fsde), label = 'fSDE', color='tab:green')
+
+    plt.xlabel('Lag', fontsize=20)
+    plt.ylabel('Correlation', fontsize=20)
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+
+    plt.legend(fontsize=20)
+    plt.tight_layout(pad=0.5)
+
+    if save:
+        plt.savefig(f'{name}.pdf', dpi=300)
+        
     plt.show()
     
     

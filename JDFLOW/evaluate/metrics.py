@@ -2,7 +2,7 @@ import numpy as np
 from scipy.signal import argrelextrema
 from scipy.spatial.distance import jensenshannon
 from scipy.stats import kstest, ks_2samp, wasserstein_distance
-from fbprophet import Prophet
+from prophet import Prophet
 from sklearn.metrics import mean_squared_error
 from IPython.display import display
 
