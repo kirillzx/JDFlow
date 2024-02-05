@@ -60,9 +60,8 @@ def js_calc(real, synth):
 
 
 def forecast_metrics(real_data, synth_data, synth_PAR, synth_fsde, n=31):
-    train_size_init = int(len(real_data[0]) - n*test_size)
-
     test_size = len(real_data[0])//n - 1
+    train_size_init = int(len(real_data[0]) - n*test_size)
 
     def forecasting_cv(synth, real, train_size_init, test_size, n):
         array_mse = []
