@@ -136,8 +136,8 @@ def plot_qq_extrema_all(real_data, synth_data, synth_ff, synth_PAR, synth_fsde, 
     plt.ylabel('Real')
     plt.xticks()
     plt.yticks()
-    plt.xlim((0, real_qqextr.max()+1))
-    plt.ylim((0, real_qqextr.max()+1))
+    plt.xlim((real_qqextr.min()-0.1, real_qqextr.max()+0.1))
+    plt.ylim((real_qqextr.min()-0.1, real_qqextr.max()+0.1))
 
     plt.legend()
     plt.tight_layout(pad=0.5)
