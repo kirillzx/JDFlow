@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from scipy.signal import argrelextrema
 from scipy.spatial.distance import jensenshannon
 from scipy.stats import kstest, ks_2samp, wasserstein_distance
