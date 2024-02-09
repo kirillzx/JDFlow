@@ -41,16 +41,23 @@ plt.style.use('ggplot')
 
 
 #choose any of type process or upload your data. The main rule that length of each series must be the same.
-def choose_data(name='DCL', n=300, M=10):
+def choose_data(name='DCL', n=300, M=10, **kwargs):
     dt = 1/n
     if name == 'DCL':
-        data = dclProcess(n, M).T
+        data = dclProcess(n, M, theta=kwargs['theta'], delta=kwargs['delta'], T=kwargs['T']).T
     
     elif name == 'Merton':
-        data = np.array([merton_process(s0=1, xiP=7, muj=0, sigmaj=0.2, r=0.04, sigma=0.6, n=n, T=1) for i in range(M)])
+        data = np.array([merton_process(s0=kwargs['s0'], xiP=kwargs['xiP'], muj=kwargs['muj'], sigmaj=kwargs['sigmaj'], r=kwargs['r'],\
+                        sigma=kwargs['sigmad'], n=n, T=kwargs['T']) for i in range(M)])
     
     elif name == 'GBM':
-        data = np.array([geometric_BM(s0=1, mu=0.1, sigma=0.5, n=n, T=1) for i in range(M)])
+        data = np.array([geometric_BM(s0=kwargs['s0'], mu=kwargs['mu'], sigma=kwargs['sigma'], n=n, T=kwargs['T']) for i in range(M)])
+        
+    elif name == 'Stock':
+        data = pd.read_csv(kwargs['filename'])
+        data = data[['Open', 'High', 'Low', 'Close']].values.T
+        n = len(data[0])
+        dt = 1/n
         
     return data, dt, n
         

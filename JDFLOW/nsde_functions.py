@@ -10,11 +10,11 @@ class Phi(nn.Module):
         self.h_dim = h_dim
         self.data_dim = data_dim
         
-        self.model = nn.Sequential(nn.Linear(self.z_dim, 2**7),
+        self.model = nn.Sequential(nn.Linear(self.z_dim, 2**6),
                                    nn.Sigmoid(),
-                                   nn.Linear(2**7, 2**7),
+                                   nn.Linear(2**6, 2**6),
                                    nn.Sigmoid(),
-                                   nn.Linear(2**7, self.h_dim))
+                                   nn.Linear(2**6, self.h_dim))
         
         self.linear = nn.Sequential(nn.Linear(self.data_dim, self.h_dim),
                                     nn.Sigmoid(),
@@ -36,10 +36,10 @@ class Drift(nn.Module):
         self.model = nn.Sequential(nn.Linear(self.h_dim, 2**6),
                                    nn.Sigmoid(),
                                 #    nn.LayerNorm(2**7),
-                                   nn.Linear(2**6, 2**7),
+                                   nn.Linear(2**6, 2**6),
                                    nn.Sigmoid(),
                                 #    nn.LayerNorm(2**7),
-                                   nn.Linear(2**7, 2**6))
+                                   nn.Linear(2**6, 2**6))
         
         self.t_nn = nn.Sequential(nn.Linear(3, 2**5),
                                   nn.Sigmoid(),
@@ -66,10 +66,10 @@ class Diffusion(nn.Module):
         self.model = nn.Sequential(nn.Linear(self.h_dim, 2**6),
                                    nn.Sigmoid(),
                                 #    nn.LayerNorm(2**7),
-                                   nn.Linear(2**6, 2**7),
+                                   nn.Linear(2**6, 2**6),
                                    nn.Sigmoid(),
                                 #    nn.LayerNorm(2**7),
-                                   nn.Linear(2**7, 2**6))
+                                   nn.Linear(2**6, 2**6))
         
         self.t_nn = nn.Sequential(nn.Linear(3, 2**5),
                                   nn.Sigmoid(),
@@ -98,15 +98,12 @@ class Jump(nn.Module):
 
         self.model = nn.Sequential(nn.Linear(self.h_dim, 2**6),
                                    nn.Sigmoid(),
-                                #    nn.LayerNorm(2**7),
-                                   nn.Linear(2**6, 2**7),
+                                   nn.Linear(2**6, 2**6),
                                    nn.Sigmoid(),
-                                #    nn.LayerNorm(2**7),
-                                   nn.Linear(2**7, 2**6))
+                                   nn.Linear(2**6, 2**6))
         
         self.t_nn = nn.Sequential(nn.Linear(3, 2**5),
                                   nn.Sigmoid(),
-                                #   nn.LayerNorm(2**6),
                                   nn.Linear(2**5, 2**6))
         
         self.proj = nn.Linear(2**7, self.h_dim)
