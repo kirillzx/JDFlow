@@ -78,3 +78,15 @@ def stack_signatures(signatures: list):
         all_sig.append(torch.stack(sig))
         
     return torch.vstack(all_sig)
+
+def signature_set_all(signature_traj, dim) -> list:
+    signature_all = []
+    for k in range(0, dim, 5): 
+        signature_f = []
+        for i in signature_traj:
+            for j in i:
+                signature_f.append(j[k])
+        
+        signature_all.append(signature_f[1:])
+        
+    return signature_all

@@ -102,7 +102,7 @@ def estimate_init_params(data, jump_part, diff_part, dt):
         
         params.append([mu_hat, var_hat, mu_j_hat, var_j_hat])
         
-    return np.array(params)
+    return np.nan_to_num(np.array(params))
 
 
 def likelihood_mjd(data, params, intensity, dt):
@@ -122,7 +122,7 @@ def optimize_params(data, params, intensity, dt):
     opt_params = []
     for i in range(len(data)):
         optimization = minimize(lambda x: -likelihood_mjd(log_return(data[i]), [x[0], x[1], x[2], x[3]], x[4], dt),\
-                                                    x0=np.hstack([params[i], intensity[i]]))
+                                                    x0=np.hstack([params[i], intensity[i]]), bounds=[(None, None), (0, None), (None, None), (0, None), (0, None)])
         opt_params.append(optimization.x)
         
     return np.mean(np.array(opt_params), 0)
