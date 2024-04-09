@@ -1,6 +1,4 @@
 # JDFlow
+## Kirill Zakharov
 
-This code is the official realization of JDFlow method from the article "Multivariate Time Series Modelling with Neural
-SDE driven by Jump Diffusion".
-
-Cite information will be provided later
+The official realisation of the prposed method JDFlow (link on the article will be available later).
