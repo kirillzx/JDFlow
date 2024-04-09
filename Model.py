@@ -91,7 +91,7 @@ def train(data, dt, n, n_flows, epochs, time_steps):
     
     # train
     # n_flows = 10
-    nsde_flow = Flow(n_flows, h_dim, M, time_steps, dt, sig_dim, xiP0)
+    nsde_flow = JDFlow(n_flows, h_dim, M, time_steps, dt, sig_dim, xiP0)
     losses = nsde_flow.fit(data_tensor, epochs)
     nsde_flow.eval()
     
