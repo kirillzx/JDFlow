@@ -8,7 +8,7 @@ from tensorflow import config as tfconfig
 from tensorflow import nn
 from tensorflow.keras import Model, Sequential, Input
 from tensorflow.keras.layers import GRU, LSTM, Dense
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers.legacy import Adam
 from tensorflow.keras.losses import BinaryCrossentropy, MeanSquaredError
 
 import numpy as np
@@ -47,19 +47,19 @@ def preprocess(data, seq_len):
         _x = ori_data[i:i + seq_len]
         temp_data.append(_x)
         
-    # idx = np.random.permutation(len(temp_data))
+    idx = np.random.permutation(len(temp_data))
     data = []
     for i in range(len(temp_data)):
-        # data.append(temp_data[idx[i]])
-        data.append(temp_data[i])
+        data.append(temp_data[idx[i]])
+        # data.append(temp_data[i])
         
-    return data
+    return data, idx
 
 
 
 def timeGAN_train(data, n_seq, train_steps):
     df = pd.DataFrame(data.T)
-    stock_data = preprocess(df.values, seq_len)
+    stock_data, idx = preprocess(df.values, seq_len)
     
     synth = TimeGAN(model_parameters=gan_args, hidden_dim=24, seq_len=seq_len, n_seq=n_seq, gamma=1)
     
@@ -105,7 +105,7 @@ def timeGAN_train(data, n_seq, train_steps):
 
     # real_sample = np.asarray(stock_data)[idx]
     synth_data = synth.sample(len(stock_data))
-    synthetic_sample = np.asarray(synth_data)[:len(stock_data)]
+    synthetic_sample = np.asarray(synth_data)[:len(stock_data)][idx]
 
     #for the purpose of comparision we need the data to be 2-Dimensional. For that reason we are going to use only two componentes for both the PCA and TSNE.
     # synth_data_reduced = real_sample.reshape(-1, seq_len)
