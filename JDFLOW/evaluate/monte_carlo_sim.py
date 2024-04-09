@@ -18,7 +18,7 @@ from JDFLOW.nsde_solvers import *
 from JDFLOW.jdflow import *
 from JDFLOW.evaluate.metrics import *
 from JDFLOW.FourierFlows import FourierFlow
-from JDFLOW.FSDE import train
+from JDFLOW.FSDE import train_fsde
 from JDFLOW.evaluate.metrics import *
 from Model import *
 

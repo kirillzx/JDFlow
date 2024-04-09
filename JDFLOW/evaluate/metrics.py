@@ -61,7 +61,7 @@ def js_calc(real, synth):
     return np.mean(w_dist)
 
 
-def forecast_metrics(real_data, synth_data, synth_PAR, synth_fsde, n=31):
+def forecast_metrics(real_data, synth_data, synth_PAR, synth_fsde, synth_ff, n=31):
     test_size = len(real_data[0])//n - 1
     train_size_init = int(len(real_data[0]) - n*test_size)
 
