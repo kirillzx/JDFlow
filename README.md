@@ -1,7 +1,7 @@
 # JDFlow
 ### Kirill Zakharov
 
-The official realisation of the prposed method JDFlow (link on the article will be available later).
+The official realisation of the prposed method JDFlow on ICCS 2024, Spain, Malaga (link on the article will be available later).
 
 #### Abstract: 
 
